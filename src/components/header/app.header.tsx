@@ -18,6 +18,7 @@ import NotificationsIcon from '@mui/icons-material/Notifications';
 import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar, Container } from '@mui/material';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
@@ -67,7 +68,7 @@ export default function AppHeader() {
 
     const isMenuOpen = Boolean(anchorEl);
     const isMobileMenuOpen = Boolean(mobileMoreAnchorEl);
-
+    const router = useRouter();
     const handleProfileMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
         setAnchorEl(event.currentTarget);
     };
@@ -154,7 +155,9 @@ export default function AppHeader() {
             </MenuItem>
         </Menu>
     );
-
+    const handleRedirectHome = () => {
+        router.push('/');
+    }
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static"
@@ -165,7 +168,8 @@ export default function AppHeader() {
                             variant="h6"
                             noWrap
                             component="div"
-                            sx={{ display: { xs: 'none', sm: 'block' } }}
+                            sx={{ display: { xs: 'none', sm: 'block' }, cursor: 'pointer' }}
+                            onClick={handleRedirectHome}
                         >
                             SoundCloud
                         </Typography>
@@ -181,7 +185,7 @@ export default function AppHeader() {
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: '15px', cursor: 'pointer', "> a": { textDecoration: 'none', color: 'unset' } }}>
                             <Link href="/playlist">Playlist</Link>
-                            <Link href="/likes">Likes</Link>
+                            <Link href="/like">Likes</Link>
                             <Link href="/upload">Upload</Link>
                             <Avatar onClick={handleProfileMenuOpen}>TR</Avatar>
                         </Box>
