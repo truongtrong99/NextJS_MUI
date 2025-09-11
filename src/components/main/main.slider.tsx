@@ -10,40 +10,60 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
 
 interface IProps {
+    title: string;
     data: ITrackTop[];
 }
 
 const MainSlider = (props: IProps) => {
+    const arrowButtonStyle = {
+        position: "absolute",
+        top: "50%",
+        zIndex: 3,
+        minWidth: 0,
+        width: 44,
+        height: 44,
+        borderRadius: "50%",
+        background: "rgba(255,255,255,0.95)",
+        border: "2px solid #1976d2",
+        boxShadow: "0 2px 8px rgba(0,0,0,0.18)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        p: 0,
+        m: 0,
+        transition: "background 0.2s, box-shadow 0.2s",
+        '&:hover': {
+            background: "#e3f2fd",
+            boxShadow: "0 4px 16px rgba(25,118,210,0.18)"
+        }
+    };
+
     const NextArrow = (props: any) => {
         return (
-            <Button variant="outlined"
+            <Button
+                variant="outlined"
                 onClick={props.onClick}
                 sx={{
-                    position: "absolute",
-                    right: 0,
-                    top: "50%",
-                    zIndex: 2,
-                    minWidth: 30,
-                    width: 35,
+                    ...arrowButtonStyle,
+                    right: -22,
                 }}
             >
-                <ChevronRightIcon />
+                <ChevronRightIcon sx={{ color: '#1976d2', fontSize: 28 }} />
             </Button>
         )
     }
 
     const PrevArrow = (props: any) => {
         return (
-            <Button variant="outlined" onClick={props.onClick}
+            <Button
+                variant="outlined"
+                onClick={props.onClick}
                 sx={{
-                    position: "absolute",
-                    top: "50%",
-                    zIndex: 2,
-                    minWidth: 30,
-                    width: 35,
+                    ...arrowButtonStyle,
+                    left: -22,
                 }}
             >
-                <ChevronLeftIcon />
+                <ChevronLeftIcon sx={{ color: '#1976d2', fontSize: 28 }} />
             </Button>
         )
     }
@@ -56,57 +76,61 @@ const MainSlider = (props: IProps) => {
         nextArrow: <NextArrow />,
         prevArrow: <PrevArrow />,
     };
+    const { data, title } = props;
+    const tracks = data.map((track) => (
+        <div className="slider-track" key={track._id}>
+            <img className="slider-img" src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} alt={track.title} />
+            <h3 className="slider-title">{track.title}</h3>
+            <p className="slider-desc">{track.description}</p>
+        </div>
+    ))
     //box === div
     return (
-
         <Box
             sx={{
                 margin: "0 50px",
-                ".abc": {
-                    padding: "0 10px"
+                '.slider-track': {
+                    padding: '10px',
+                    background: '#fff',
+                    borderRadius: '12px',
+                    boxShadow: '0 2px 8px rgba(0,0,0,0.07)',
+                    display: 'flex',
+                    flexDirection: 'column',
+                    alignItems: 'center',
+                    transition: 'box-shadow 0.2s',
+                    '&:hover': {
+                        boxShadow: '0 4px 16px rgba(0,0,0,0.15)'
+                    },
                 },
-                "h3": {
-                    border: "1px solid #ccc",
-                    padding: "20px",
-                    height: "200px",
-
-                }
+                '.slider-img': {
+                    width: '100%',
+                    maxWidth: '160px',
+                    height: '160px',
+                    objectFit: 'cover',
+                    borderRadius: '10px',
+                    marginBottom: '12px',
+                },
+                '.slider-title': {
+                    fontSize: '1.1rem',
+                    fontWeight: 600,
+                    margin: '0 0 6px 0',
+                    textAlign: 'center',
+                    color: '#222',
+                },
+                '.slider-desc': {
+                    fontSize: '0.95rem',
+                    color: '#666',
+                    textAlign: 'center',
+                    margin: 0,
+                },
             }}
         >
-            <h2> Multiple tracks </h2>
-
+            <h2 style={{ marginBottom: 20 }}>{title}</h2>
             <Slider {...settings}>
-                <div className="abc">
-                    <h3>Track 1</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 2</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 3</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 4</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 5</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 6</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 7</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 8</h3>
-                </div>
-                <div className="abc">
-                    <h3>Track 9</h3>
-                </div>
+                {tracks}
             </Slider>
-            <Divider />
+            <Divider sx={{ marginTop: 2 }} />
         </Box>
-
     );
 }
 
