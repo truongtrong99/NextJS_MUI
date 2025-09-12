@@ -1,7 +1,7 @@
 'use client'
 import { useWaveSurfer } from '@/utils/customHook';
 import { useSearchParams } from 'next/navigation';
-import { useMemo, useRef } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 
 const WaveTrack = () => {
@@ -15,7 +15,31 @@ const WaveTrack = () => {
             url: `/api?audio=${fileName}`,
         }
     }, [])
+    const [isPlaying, setIsPlaying] = useState<boolean>(false);
     const wavesurfer = useWaveSurfer(containerRef, optionsMemo);
-    return <div ref={containerRef}>WaveTrack</div>;
+    useEffect(() => {
+        if (!wavesurfer) return;
+        setIsPlaying(false)
+        const subscriptions = [
+            wavesurfer.on('play', () => setIsPlaying(true)),
+            wavesurfer.on('pause', () => setIsPlaying(false))
+        ]
+        return () => {
+            subscriptions.forEach(unsub => unsub());
+        }
+    }, [wavesurfer]);
+
+    const onPlayClick = useCallback(() => {
+        if (wavesurfer) {
+            wavesurfer.isPlaying() ? wavesurfer.pause() : wavesurfer.play();
+        }
+    }, [wavesurfer])
+
+    return <>
+        <div ref={containerRef}>WaveTrack</div>
+        <button onClick={onPlayClick}>
+            {isPlaying == true ? 'Pause' : 'Play'}
+        </button>
+    </>
 }
 export default WaveTrack;

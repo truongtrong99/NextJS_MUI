@@ -27,7 +27,7 @@ export const useScript = (url: string) => {
 
 //WaveSurfer hook
 export const useWaveSurfer = (containerRef: React.RefObject<HTMLDivElement>, options: Omit<WaveSurferOptions, 'container'>) => {
-    const [wavesurfer, setWavesurfer] = useState<any>(null);
+    const [wavesurfer, setWavesurfer] = useState<WaveSurfer | null>(null);
 
     useEffect(() => {
         if (!containerRef.current) return;
