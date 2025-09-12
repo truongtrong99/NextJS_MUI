@@ -8,6 +8,7 @@ import Button from "@mui/material/Button/Button";
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Divider from '@mui/material/Divider';
+import Link from "next/link";
 
 interface IProps {
     title: string;
@@ -80,7 +81,9 @@ const MainSlider = (props: IProps) => {
     const tracks = data.map((track) => (
         <div className="slider-track" key={track._id}>
             <img className="slider-img" src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} alt={track.title} />
-            <h3 className="slider-title">{track.title}</h3>
+            <Link href={`/track/${track._id}`} style={{ textDecoration: 'none' }}>
+                <h3 className="slider-title">{track.title}</h3>
+            </Link>
             <p className="slider-desc">{track.description}</p>
         </div>
     ))
