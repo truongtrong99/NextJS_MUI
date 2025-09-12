@@ -81,7 +81,7 @@ const MainSlider = (props: IProps) => {
     const tracks = data.map((track) => (
         <div className="slider-track" key={track._id}>
             <img className="slider-img" src={`${process.env.NEXT_PUBLIC_BACKEND_URL}/images/${track.imgUrl}`} alt={track.title} />
-            <Link href={`/track/${track._id}`} style={{ textDecoration: 'none' }}>
+            <Link href={`/track/${track._id}?audio=${track.trackUrl}`} style={{ textDecoration: 'none' }}>
                 <h3 className="slider-title">{track.title}</h3>
             </Link>
             <p className="slider-desc">{track.description}</p>
