@@ -1,12 +1,14 @@
 'use client'
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import WaveSurfer from 'wavesurfer.js';
+
 const WaveTrack = () => {
+    const containerRef = useRef<HTMLDivElement | null>(null);
+
     useEffect(() => {
-        const element = document.getElementById('wave-track');
-        if (element) {
+        if (containerRef.current) {
             const wavesurfer = WaveSurfer.create({
-                container: element,
+                container: containerRef.current,
                 waveColor: 'rgb(200, 0, 200)',
                 progressColor: 'rgb(100, 0, 100)',
                 url: '/audio/hoidanit.mp3',
@@ -14,6 +16,6 @@ const WaveTrack = () => {
         }
 
     }, [])
-    return <div id='wave-track'>WaveTrack</div>;
+    return <div ref={containerRef}>WaveTrack</div>;
 }
 export default WaveTrack;
