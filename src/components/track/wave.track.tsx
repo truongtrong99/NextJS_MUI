@@ -13,11 +13,11 @@ const WaveTrack = () => {
     const [duration, setDuration] = useState<string>('0:00');
     const hoverRef = useRef<HTMLDivElement | null>(null);
     const optionsMemo = useMemo((): Omit<WaveSurferOptions, 'container'> => {
-        const canvas = document.createElement('canvas')
-        const ctx = canvas.getContext('2d')!
-        let gradient, progressGradient;
 
+        let gradient, progressGradient;
         if (typeof window !== 'undefined') {
+            const canvas = document.createElement('canvas')
+            const ctx = canvas.getContext('2d')!
             // Define the waveform gradient
             gradient = ctx.createLinearGradient(0, 0, 0, canvas.height * 1.35)
             gradient.addColorStop(0, '#656666') // Top color
