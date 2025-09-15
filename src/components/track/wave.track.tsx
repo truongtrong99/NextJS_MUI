@@ -4,7 +4,8 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { WaveSurferOptions } from 'wavesurfer.js';
 import './wave.scss'
-
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 const WaveTrack = () => {
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio')
@@ -40,8 +41,8 @@ const WaveTrack = () => {
             waveColor: gradient,
             progressColor: progressGradient,
             url: `/api?audio=${fileName}`,
-            barWidth: 2,
-            height: 150,
+            barWidth: 3,
+            height: 100,
         }
     }, [])
     const [isPlaying, setIsPlaying] = useState<boolean>(false);
@@ -81,16 +82,143 @@ const WaveTrack = () => {
         const paddedSeconds = `0${secondsRemainder}`.slice(-2)
         return `${minutes}:${paddedSeconds}`
     }
-
+    const arrComments = [
+        {
+            id: 1,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 10,
+            user: "username 1",
+            content: "just a comment1"
+        },
+        {
+            id: 2,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 30,
+            user: "username 2",
+            content: "just a comment3"
+        },
+        {
+            id: 3,
+            avatar: "http://localhost:8000/images/chill1.png",
+            moment: 50,
+            user: "username 3",
+            content: "just a comment3"
+        },
+    ]
+    const calcLeft = (moment: number) => {
+        const hardCodeDuration = 199;
+        const percent = (moment / hardCodeDuration) * 100;
+        return `${percent}%`;
+    }
     return <>
-        <div ref={containerRef} className="wave-form-container" style={{ marginTop: 100 }}>
-            <div className='time' id="time">{time}</div>
-            <div className='duration' id="duration">{duration}</div>
-            <div className='hover-wave' ref={hoverRef}></div>
+        <div style={{ marginTop: 20 }}>
+            <div style={{
+                display: 'flex',
+                gap: 15,
+                padding: 20,
+                height: 400,
+                background: "linear-gradient(135deg, rgb(106, 112, 67) 0%, rgb(11, 15, 20) 100%)"
+            }}>
+                <div className="left"
+                    style={{
+                        width: '75%',
+                        height: 'calc(100% - 10px)',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        justifyContent: 'space-between'
+                    }}>
+                    <div className="info" style={{ display: 'flex' }}>
+                        <div>
+                            <div
+                                onClick={onPlayClick}
+                                style={{
+                                    borderRadius: "50%",
+                                    width: "50px",
+                                    height: "50px",
+                                    background: "#EE772F",
+                                    position: "absolute",
+                                    display: "flex",
+                                    alignItems: "center",
+                                    justifyContent: "center",
+                                    cursor: "pointer",
+                                }}>
+
+                                {isPlaying ?
+                                    <PauseIcon
+                                        sx={{ fontSize: 30, color: '#fff' }} /> :
+                                    <PlayArrowIcon
+                                        sx={{ fontSize: 30, color: '#fff' }} />}
+                            </div>
+                        </div>
+                        <div style={{ marginLeft: 70 }}>
+                            <div style={{
+                                padding: '0px 5px',
+                                background: '#333',
+                                fontSize: 30,
+                                width: "fit-content",
+                                color: '#fff',
+                            }}>
+                                Music Name
+                            </div>
+                            <div style={{
+                                padding: '0px 5px',
+                                marginTop: 10,
+                                background: '#333',
+                                fontSize: 20,
+                                width: "fit-content",
+                                color: '#fff',
+                            }}>
+                                Author
+                            </div>
+                        </div>
+                    </div>
+                    <div ref={containerRef} className="wave-form-container" >
+                        <div className='time' id="time">{time}</div>
+                        <div className='duration' id="duration">{duration}</div>
+                        <div className='hover-wave' ref={hoverRef}></div>
+                        <div className='overlay'
+                            style={{
+                                position: 'absolute',
+                                height: '30px',
+                                width: '100%',
+                                bottom: 0,
+                                backdropFilter: 'brightness(0.5)',
+                            }}>
+
+                        </div>
+                        <div className="comments" style={{ position: "relative" }}>
+                            {
+                                arrComments.map(cmt => (
+                                    <img
+                                        className={'' + cmt.id}
+                                        key={cmt.id}
+                                        style={{
+                                            height: 20, width: 20, position: 'absolute', top: 71, zIndex: 20
+                                            , left: calcLeft(cmt.moment)
+                                        }} src={cmt.avatar} />
+                                ))
+                            }
+                        </div>
+                    </div>
+                </div>
+                <div className="right">
+                    <div
+                        style={
+
+                            {
+                                marginTop: 20,
+                                height: "200px",
+                                width: "200px",
+                                background: "gray"
+                            }
+                        }>
+
+
+                    </div>
+
+                </div>
+            </div>
         </div>
-        <button onClick={onPlayClick}>
-            {isPlaying == true ? 'Pause' : 'Play'}
-        </button>
     </>
 }
 export default WaveTrack;
