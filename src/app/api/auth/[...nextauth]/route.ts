@@ -9,8 +9,21 @@ export const authOptions: AuthOptions = {
             clientId: process.env.GITHUB_ID!,
             clientSecret: process.env.GITHUB_SECRET!,
         }),
-        // ...add more providers here
     ],
+    callbacks: {
+        jwt: async ({ token, user, account, profile, trigger }) => {
+            if (trigger === 'signIn' && account?.provider === 'github') {
+                ///
+                token.address = 'tro'
+            }
+            return token
+        },
+        async session({ session, token, user }) {
+            //@ts-ignore
+            session.address = token.address;
+            return session
+        },
+    }
 }
 
 const handler = NextAuth(authOptions)

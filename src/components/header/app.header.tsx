@@ -19,7 +19,8 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar, Container } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-import { useSession } from "next-auth/react"
+import { signOut, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -101,7 +102,10 @@ export default function AppHeader() {
             <MenuItem onClick={handleMenuClose}>
                 <Link href="/profile" style={{ color: 'unset', textDecoration: 'none' }}>Profile</Link>
             </MenuItem>
-            <MenuItem onClick={handleMenuClose}>Logout</MenuItem>
+            <MenuItem onClick={() => {
+                handleMenuClose();
+                signOut();
+            }}>Logout</MenuItem>
         </Menu>
     );
 
@@ -191,7 +195,7 @@ export default function AppHeader() {
                                     <Link href="/like">Likes</Link>
                                     <Link href="/upload">Upload</Link>
                                     <Avatar onClick={handleProfileMenuOpen}>TR</Avatar>
-                                </> : <Link href="/api/auth/signin">Login</Link>
+                                </> : <Link href="#" onClick={() => signIn()}>Login</Link>
                             }
 
                         </Box>
