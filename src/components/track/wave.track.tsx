@@ -6,6 +6,7 @@ import { WaveSurferOptions } from 'wavesurfer.js';
 import './wave.scss'
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import { Tooltip } from '@mui/material';
 const WaveTrack = () => {
     const searchParams = useSearchParams()
     const fileName = searchParams.get('audio')
@@ -189,13 +190,20 @@ const WaveTrack = () => {
                         <div className="comments" style={{ position: "relative" }}>
                             {
                                 arrComments.map(cmt => (
-                                    <img
-                                        className={'' + cmt.id}
-                                        key={cmt.id}
-                                        style={{
-                                            height: 20, width: 20, position: 'absolute', top: 71, zIndex: 20
-                                            , left: calcLeft(cmt.moment)
-                                        }} src={cmt.avatar} />
+                                    <Tooltip title={cmt.content} arrow>
+                                        <img
+                                            onPointerMove={() => {
+                                                const hover = hoverRef.current!
+                                                hover.style.width = calcLeft(cmt.moment)
+                                            }}
+                                            className={'' + cmt.id}
+                                            key={cmt.id}
+                                            style={{
+                                                height: 20, width: 20, position: 'absolute', top: 71, zIndex: 20
+                                                , left: calcLeft(cmt.moment)
+                                            }} src={cmt.avatar} />
+                                    </Tooltip>
+
                                 ))
                             }
                         </div>
