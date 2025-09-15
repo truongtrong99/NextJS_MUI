@@ -13,14 +13,12 @@ export const authOptions: AuthOptions = {
     callbacks: {
         jwt: async ({ token, user, account, profile, trigger }) => {
             if (trigger === 'signIn' && account?.provider === 'github') {
-                ///
-                token.address = 'tro'
+
             }
             return token
         },
         async session({ session, token, user }) {
-            //@ts-ignore
-            session.address = token.address;
+            // session.user.address = token.address as any;
             return session
         },
     }
