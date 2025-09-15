@@ -19,7 +19,7 @@ import MoreIcon from '@mui/icons-material/MoreVert';
 import { Avatar, Container } from '@mui/material';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
-
+import { useSession } from "next-auth/react"
 const Search = styled('div')(({ theme }) => ({
     position: 'relative',
     borderRadius: theme.shape.borderRadius,
@@ -62,6 +62,7 @@ const StyledInputBase = styled(InputBase)(({ theme }) => ({
 }));
 
 export default function AppHeader() {
+    const { data: session } = useSession()
     const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
     const [mobileMoreAnchorEl, setMobileMoreAnchorEl] =
         React.useState<null | HTMLElement>(null);
@@ -184,10 +185,15 @@ export default function AppHeader() {
                         </Search>
                         <Box sx={{ flexGrow: 1 }} />
                         <Box sx={{ display: { xs: 'none', md: 'flex' }, alignItems: 'center', gap: '15px', cursor: 'pointer', "> a": { textDecoration: 'none', color: 'unset' } }}>
-                            <Link href="/playlist">Playlist</Link>
-                            <Link href="/like">Likes</Link>
-                            <Link href="/upload">Upload</Link>
-                            <Avatar onClick={handleProfileMenuOpen}>TR</Avatar>
+                            {
+                                session?.user ? <>
+                                    <Link href="/playlist">Playlist</Link>
+                                    <Link href="/like">Likes</Link>
+                                    <Link href="/upload">Upload</Link>
+                                    <Avatar onClick={handleProfileMenuOpen}>TR</Avatar>
+                                </> : <Link href="/api/auth/signin">Login</Link>
+                            }
+
                         </Box>
                         <Box sx={{ display: { xs: 'flex', md: 'none' } }}>
                             <IconButton
