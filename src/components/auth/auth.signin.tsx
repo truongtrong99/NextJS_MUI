@@ -24,6 +24,9 @@ import { useState } from 'react';
 import { signIn } from "next-auth/react"
 import Link from 'next/link';
 import { useRouter } from 'next/navigation'
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
 const AuthSignIn = () => {
     const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
@@ -39,7 +42,8 @@ const AuthSignIn = () => {
         username: false,
         password: false
     });
-
+    const [openMessage, setOpenMessage] = useState<boolean>(false);
+    const [resMessage, setResMessage] = useState<string>('');
     const handleClickShowPassword = () => setShowPassword((show) => !show);
 
     const validateField = (field: string, value: string) => {
@@ -126,7 +130,8 @@ const AuthSignIn = () => {
                 // redirect to home
                 router.push('/');
             } else {
-                alert(result.error);
+                setOpenMessage(true);
+                setResMessage(result.error || 'Sign in failed');
             }
         }
     };
@@ -228,6 +233,7 @@ const AuthSignIn = () => {
                             />
 
                             <TextField
+                                onKeyDown={(e) => { if (e.key === 'Enter') handleSubmit(e); }}
                                 margin="normal"
                                 required
                                 fullWidth
@@ -343,6 +349,16 @@ const AuthSignIn = () => {
                     </CardContent>
                 </Card>
             </Box>
+            <Snackbar open={openMessage} anchorOrigin={{ vertical: 'top', horizontal: 'center' }}>
+                <Alert
+                    onClose={() => setOpenMessage(false)}
+                    severity="error"
+                    variant="filled"
+                    sx={{ width: '100%' }}
+                >
+                    {resMessage}
+                </Alert>
+            </Snackbar>
         </Container>
     );
 }
