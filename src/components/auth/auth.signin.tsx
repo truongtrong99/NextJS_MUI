@@ -20,7 +20,7 @@ import {
     Google
 } from '@mui/icons-material';
 import { useState } from 'react';
-
+import { signIn } from "next-auth/react"
 const AuthSignIn = () => {
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
@@ -289,6 +289,7 @@ const AuthSignIn = () => {
                                             bgcolor: '#f57c00',
                                         },
                                     }}
+                                    onClick={() => signIn('github')}
                                 >
                                     <GitHub />
                                 </IconButton>

@@ -195,7 +195,7 @@ export default function AppHeader() {
                                     <Link href="/like">Likes</Link>
                                     <Link href="/upload">Upload</Link>
                                     <Avatar onClick={handleProfileMenuOpen}>TR</Avatar>
-                                </> : <Link href="#" onClick={() => signIn()}>Login</Link>
+                                </> : <Link href={"auth/signin"}>Login</Link>
                             }
 
                         </Box>
