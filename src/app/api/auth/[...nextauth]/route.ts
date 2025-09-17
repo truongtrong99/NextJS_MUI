@@ -35,7 +35,8 @@ export const authOptions: AuthOptions = {
                     return res.data
                 } else {
                     // If you return null then an error will be displayed advising the user to check their details.
-                    return null
+                    // return null
+                    throw new Error(res?.message as string)
 
                     // You can also Reject this callback with an Error thus the user will be sent to the error page with the error message as a query parameter
                 }

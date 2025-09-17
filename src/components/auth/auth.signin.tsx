@@ -17,11 +17,15 @@ import {
     VisibilityOff,
     Lock,
     GitHub,
-    Google
+    Google,
+    ArrowBack
 } from '@mui/icons-material';
 import { useState } from 'react';
 import { signIn } from "next-auth/react"
+import Link from 'next/link';
+import { useRouter } from 'next/navigation'
 const AuthSignIn = () => {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [formData, setFormData] = useState({
         username: '',
@@ -90,7 +94,7 @@ const AuthSignIn = () => {
         }));
     };
 
-    const handleSubmit = (event: React.FormEvent) => {
+    const handleSubmit = async (event: React.FormEvent) => {
         event.preventDefault();
 
         // Mark all fields as touched
@@ -112,6 +116,18 @@ const AuthSignIn = () => {
         if (!usernameError && !passwordError) {
             console.log('Sign in attempt:', formData);
             // Handle sign in logic here
+            const result = await signIn('credentials', {
+                username: formData.username,
+                password: formData.password,
+                redirect: false,
+            });
+
+            if (!result?.error) {
+                // redirect to home
+                router.push('/');
+            } else {
+                alert(result.error);
+            }
         }
     };
 
@@ -131,10 +147,25 @@ const AuthSignIn = () => {
                     sx={{
                         width: '100%',
                         maxWidth: 400,
-                        p: 2
+                        p: 2,
+                        position: 'relative'
                     }}
                 >
                     <CardContent>
+                        {/* Back Button */}
+                        <Box
+                            sx={{
+                                position: 'absolute',
+                                top: 16,
+                                left: 16,
+                                zIndex: 1
+                            }}
+                        >
+                            <Link href="/" >
+                                <ArrowBack />
+                            </Link>
+                        </Box>
+
                         <Box
                             sx={{
                                 display: 'flex',
